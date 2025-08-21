@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using presupuestoBasadoAPI.Models;
 using presupuestoBasadoAPI.Dto;
+using presupuestoBasadoAPI.Helpers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -12,12 +13,18 @@ public class CuentasController : ControllerBase
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IConfiguration _config;
 
     public CuentasController(SignInManager<ApplicationUser> signInManager,
-                             UserManager<ApplicationUser> userManager)
+                             UserManager<ApplicationUser> userManager,
+                             RoleManager<IdentityRole> roleManager,
+                             IConfiguration config)
     {
         _signInManager = signInManager;
         _userManager = userManager;
+        _roleManager = roleManager;
+        _config = config;
     }
 
     [HttpPost("Login")]
@@ -31,11 +38,14 @@ public class CuentasController : ControllerBase
         if (!result.Succeeded)
             return Unauthorized("Contraseña incorrecta.");
 
-        // Aquí podrías devolver datos del usuario o generar un token JWT (recomendado)
+        var roles = await _userManager.GetRolesAsync(user);
+        var token = JwtHelper.GenerateJwtToken(user, roles, _config);
+
         return Ok(new
         {
-            mensaje = "Inicio de sesión correcto",
-            user = user.UserName
+            token,
+            username = user.UserName,
+            roles
         });
     }
 
@@ -46,7 +56,15 @@ public class CuentasController : ControllerBase
         {
             UserName = model.User,
             Email = model.Email,
-            NombreCompleto = model.NombreCompleto
+            NombreCompleto = model.NombreCompleto,
+            Cargo = model.Cargo,
+            Coordinador = model.Coordinador,
+            UnidadesPresupuestales = model.UnidadesPresupuestales,
+            ProgramaPresupuestario = model.ProgramaPresupuestario,
+            NombreMatriz = model.NombreMatriz,
+            // UnidadResponsable
+            UnidadAdministrativaId = model.UnidadAdministrativaId
+
         };
 
         var resultado = await _userManager.CreateAsync(usuario, model.Password);
@@ -54,10 +72,26 @@ public class CuentasController : ControllerBase
         if (!resultado.Succeeded)
             return BadRequest(resultado.Errors);
 
-        // Puedes asignar un rol si lo deseas:
-        // await _userManager.AddToRoleAsync(usuario, "Enlace");
+        // Validar y asignar el rol
+        if (!string.IsNullOrEmpty(model.Rol))
+        {
+            var roleExists = await _roleManager.RoleExistsAsync(model.Rol);
+            if (!roleExists)
+                return BadRequest($"El rol '{model.Rol}' no existe.");
 
-        return Ok("Usuario registrado correctamente.");
+            await _userManager.AddToRoleAsync(usuario, model.Rol);
+        }
+
+        return Ok($"Usuario registrado correctamente con el rol: {model.Rol}");
     }
 
+    [HttpGet("roles/{username}")]
+    public async Task<IActionResult> GetRoles(string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null) return NotFound("Usuario no encontrado.");
+
+        var roles = await _userManager.GetRolesAsync(user);
+        return Ok(roles);
+    }
 }

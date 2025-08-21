@@ -1,6 +1,6 @@
-﻿namespace presupuestoBasadoAPI.Models
+﻿namespace presupuestoBasadoAPI.Dto
 {
-    public class ProgramaPresupuestario
+    public class ProgramaDto
     {
         public int Id { get; set; }
         public string Clave { get; set; }

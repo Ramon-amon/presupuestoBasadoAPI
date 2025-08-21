@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace presupuestoBasadoAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250805024745_AddEntregaBienes")]
+    partial class AddEntregaBienes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,28 +157,6 @@ namespace presupuestoBasadoAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.Accion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ComponenteId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComponenteId");
-
-                    b.ToTable("Acciones");
-                });
-
             modelBuilder.Entity("presupuestoBasadoAPI.Models.AlineacionEstado", b =>
                 {
                     b.Property<int>("Id")
@@ -270,35 +251,6 @@ namespace presupuestoBasadoAPI.Migrations
                     b.ToTable("AnalisisEntorno");
                 });
 
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.Antecedente", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ContextoHistoricoNormativo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescripcionPrograma")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ExperienciasPrevias")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProblematicaOrigen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Antecedentes");
-                });
-
             modelBuilder.Entity("presupuestoBasadoAPI.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -307,16 +259,8 @@ namespace presupuestoBasadoAPI.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Cargo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Coordinador")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -333,10 +277,6 @@ namespace presupuestoBasadoAPI.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NombreCompleto")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NombreMatriz")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -357,10 +297,6 @@ namespace presupuestoBasadoAPI.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ProgramaPresupuestario")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -370,10 +306,6 @@ namespace presupuestoBasadoAPI.Migrations
                     b.Property<int?>("UnidadAdministrativaId")
                         .HasColumnType("int")
                         .HasColumnName("UnidadAdministrativaId");
-
-                    b.Property<string>("UnidadesPresupuestales")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -426,52 +358,6 @@ namespace presupuestoBasadoAPI.Migrations
                     b.ToTable("ClasificacionesFuncionales");
                 });
 
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.Cobertura", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CuantificacionPoblacionAtendidaAnterior")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CuantificacionPoblacionObjetivo")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CuantificacionPoblacionPotencial")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FrecuenciaActualizacion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdentificacionCaracterizacionPoblacionObjetivo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdentificacionCaracterizacionPoblacionPotencial")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProcesoIdentificacionPoblacionObjetivo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProcesoIdentificacionPoblacionPotencial")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnidadMedida")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Coberturas");
-                });
-
             modelBuilder.Entity("presupuestoBasadoAPI.Models.Componente", b =>
                 {
                     b.Property<int>("Id")
@@ -480,105 +366,22 @@ namespace presupuestoBasadoAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DisenoIntervencionPublicaId")
-                        .HasColumnType("int");
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProgramaPresupuestarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DisenoIntervencionPublicaId");
+                    b.HasIndex("ProgramaPresupuestarioId");
 
                     b.ToTable("Componentes");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.DeterminacionJustificacionObjetivos", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ObjetivosEspecificos")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RelacionOtrosProgramas")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DeterminacionJustificacionObjetivo");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.DisenoIntervencionPublica", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("EscenariosFuturosEsperar")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EtapasIntervencion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DisenoIntervencionPublicas");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.IdentificacionDescripcionProblema", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CausaBeneficiados")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CausaEjecutores")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CausaIndiferentes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CausaOpositores")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Efectos")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Evolucion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Involucrados")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProblemaCentral")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentificacionDescripcionProblemas");
                 });
 
             modelBuilder.Entity("presupuestoBasadoAPI.Models.IdentificacionProblema", b =>
@@ -635,28 +438,6 @@ namespace presupuestoBasadoAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("JustificacionProgramas");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.PadronBeneficiarios", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ArchivoAdjunto")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LigaInternet")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TienePadron")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PadronBeneficiarios");
                 });
 
             modelBuilder.Entity("presupuestoBasadoAPI.Models.PoblacionObjetivo", b =>
@@ -720,48 +501,6 @@ namespace presupuestoBasadoAPI.Migrations
                     b.ToTable("Programas");
                 });
 
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.ProgramaSocial", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("EsProgramaSocial")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ProgramaSocial");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.ProgramaSocialCategoria", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProgramaSocialId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProgramaSocialId");
-
-                    b.ToTable("ProgramaSocialCategorias");
-                });
-
             modelBuilder.Entity("presupuestoBasadoAPI.Models.Ramo", b =>
                 {
                     b.Property<int>("Id")
@@ -785,52 +524,6 @@ namespace presupuestoBasadoAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Ramos");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.ReglasOperacion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ArchivoAdjunto")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LigaInternet")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TieneReglasOperacion")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ReglasOperacion");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.Resultado", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ComponenteId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Descripcion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComponenteId");
-
-                    b.ToTable("Resultados");
                 });
 
             modelBuilder.Entity("presupuestoBasadoAPI.Models.UnidadAdministrativa", b =>
@@ -904,17 +597,6 @@ namespace presupuestoBasadoAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.Accion", b =>
-                {
-                    b.HasOne("presupuestoBasadoAPI.Models.Componente", "Componente")
-                        .WithMany("Acciones")
-                        .HasForeignKey("ComponenteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Componente");
-                });
-
             modelBuilder.Entity("presupuestoBasadoAPI.Models.ApplicationUser", b =>
                 {
                     b.HasOne("presupuestoBasadoAPI.Models.UnidadAdministrativa", "UnidadAdministrativa")
@@ -927,52 +609,13 @@ namespace presupuestoBasadoAPI.Migrations
 
             modelBuilder.Entity("presupuestoBasadoAPI.Models.Componente", b =>
                 {
-                    b.HasOne("presupuestoBasadoAPI.Models.DisenoIntervencionPublica", "DisenoIntervencionPublica")
-                        .WithMany("Componentes")
-                        .HasForeignKey("DisenoIntervencionPublicaId")
+                    b.HasOne("presupuestoBasadoAPI.Models.ProgramaPresupuestario", "ProgramaPresupuestario")
+                        .WithMany()
+                        .HasForeignKey("ProgramaPresupuestarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DisenoIntervencionPublica");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.ProgramaSocialCategoria", b =>
-                {
-                    b.HasOne("presupuestoBasadoAPI.Models.ProgramaSocial", "ProgramaSocial")
-                        .WithMany("Categorias")
-                        .HasForeignKey("ProgramaSocialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProgramaSocial");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.Resultado", b =>
-                {
-                    b.HasOne("presupuestoBasadoAPI.Models.Componente", "Componente")
-                        .WithMany("Resultados")
-                        .HasForeignKey("ComponenteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Componente");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.Componente", b =>
-                {
-                    b.Navigation("Acciones");
-
-                    b.Navigation("Resultados");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.DisenoIntervencionPublica", b =>
-                {
-                    b.Navigation("Componentes");
-                });
-
-            modelBuilder.Entity("presupuestoBasadoAPI.Models.ProgramaSocial", b =>
-                {
-                    b.Navigation("Categorias");
+                    b.Navigation("ProgramaPresupuestario");
                 });
 
             modelBuilder.Entity("presupuestoBasadoAPI.Models.UnidadAdministrativa", b =>
