@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using presupuestoBasadoAPI.Models;
 using presupuestoBasadoAPI.Services;
 using presupuestoBasadoAPI.Interfaces;
@@ -27,7 +30,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-// Agregar Identity con soporte de roles
+// Agregar Identity con soporte de roles (sin cookies)
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
@@ -47,15 +50,50 @@ builder.Services.AddScoped<IProgramaSocialService, ProgramaSocialService>();
 builder.Services.AddScoped<IPadronBeneficiariosService, PadronBeneficiariosService>();
 builder.Services.AddScoped<IReglasOperacionService, ReglasOperacionService>();
 
+// ============================
+// 🔑 Configuración JWT
+// ============================
+var jwtKey = builder.Configuration["Jwt:Key"]; // ⚠️ Debes definir Jwt:Key en appsettings.json
+if (string.IsNullOrEmpty(jwtKey))
+{
+    throw new Exception("No se encontró la clave Jwt:Key en appsettings.json");
+}
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+        ClockSkew = TimeSpan.Zero
+    };
+
+    // 🔒 Evita redirect a /Account/Login
+    options.Events = new JwtBearerEvents
+    {
+        OnChallenge = context =>
+        {
+            context.HandleResponse();
+            context.Response.StatusCode = 401;
+            context.Response.ContentType = "application/json";
+            return context.Response.WriteAsync("{\"error\":\"No autorizado o token inválido\"}");
+        }
+    };
+});
+
+builder.Services.AddAuthorization();
 
 // Agregar controladores y Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-//  Habilitar autenticación y autorización
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

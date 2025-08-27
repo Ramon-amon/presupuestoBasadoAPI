@@ -42,6 +42,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Componente> Componentes { get; set; }
     public DbSet<Accion> Acciones { get; set; }
     public DbSet<Resultado> Resultados { get; set; }
+    public DbSet<EfectoSuperior> EfectosSuperiores { get; set; }
 
 
 }

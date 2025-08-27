@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using presupuestoBasadoAPI.Models;
 using presupuestoBasadoAPI.Dto;
 using presupuestoBasadoAPI.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -93,5 +94,30 @@ public class CuentasController : ControllerBase
 
         var roles = await _userManager.GetRolesAsync(user);
         return Ok(roles);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> GetUsuarioActual()
+    {
+        var username = User.Identity?.Name;
+        if (string.IsNullOrEmpty(username))
+            return Unauthorized();
+
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null) return NotFound("Usuario no encontrado.");
+
+        return Ok(new
+        {
+            user.UserName,
+            user.Email,
+            user.NombreCompleto,
+            user.Cargo,
+            user.Coordinador,
+            user.UnidadesPresupuestales,
+            user.ProgramaPresupuestario,
+            user.NombreMatriz,
+            user.UnidadAdministrativaId
+        });
     }
 }
