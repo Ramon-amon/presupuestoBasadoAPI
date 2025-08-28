@@ -43,6 +43,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Accion> Acciones { get; set; }
     public DbSet<Resultado> Resultados { get; set; }
     public DbSet<EfectoSuperior> EfectosSuperiores { get; set; }
-
+    public DbSet<ArbolObjetivos> ArbolObjetivos { get; set; }
 
 }

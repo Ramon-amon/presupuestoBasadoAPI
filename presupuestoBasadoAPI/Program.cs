@@ -49,10 +49,9 @@ builder.Services.AddScoped<IDisenoIntervencionPublicaService, DisenoIntervencion
 builder.Services.AddScoped<IProgramaSocialService, ProgramaSocialService>();
 builder.Services.AddScoped<IPadronBeneficiariosService, PadronBeneficiariosService>();
 builder.Services.AddScoped<IReglasOperacionService, ReglasOperacionService>();
+builder.Services.AddScoped<IArbolObjetivosService, ArbolObjetivosService>();
 
-// ============================
-// 🔑 Configuración JWT
-// ============================
+
 var jwtKey = builder.Configuration["Jwt:Key"]; // ⚠️ Debes definir Jwt:Key en appsettings.json
 if (string.IsNullOrEmpty(jwtKey))
 {
